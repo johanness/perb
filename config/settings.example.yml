@@ -1,0 +1,8 @@
+"1":
+  num-conns: '30'
+  rate: '5'
+  timeout: '5'
+  server: 'localhost'
+  port: '3000'
+  uri: '/'
+  num-calls: '10'
