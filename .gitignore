@@ -1,3 +1,7 @@
 *.swp
 config/settings.yml
+config/database.yml
 .rvmrc
+trash/
+db/*.sqlite3
+*.log
