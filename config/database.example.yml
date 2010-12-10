@@ -1,0 +1,4 @@
+adapter: mysql
+username: root
+database: perb
+timeout: 5000

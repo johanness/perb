@@ -2,8 +2,25 @@ require 'yaml'
 require 'rubygems'
 require "active_record"
 
+class Result < ActiveRecord::Base
+end
+
 def save_result_to_database(match)
-  # TODO save to database
+
+  connection = ActiveRecord::Base.establish_connection(
+    :adapter => "mysql",
+    :host => "localhost",
+    :user => "root",
+    :database => "perb",
+    :password => ""
+  )
+  unless connection.connected?
+    puts "Could not establish connection, please run"
+    puts "rake db:create"
+    puts "rake db:migrate"
+    Process.exit
+  end
+  Result.create(:average_reply_rate => match[20].to_f)
 end
 
 def measure
