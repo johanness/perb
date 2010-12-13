@@ -19,11 +19,11 @@ namespace :db do
       db_file=config['database']
       `rm "#{db_file}"`
     else
-      puts "Support for dropping databases other than SQLite not yet supported"
+      puts "Support for dropping databases other than SQLite not yet implemented"
     end
   end
 
   task :environment do
-    ActiveRecord::Base.logger = Logger.new(File.open('database.log', 'a'))
+    ActiveRecord::Base.logger = Logger.new(File.open('log/database.log', 'a'))
   end
 end
