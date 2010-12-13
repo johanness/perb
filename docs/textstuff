@@ -1,0 +1,136 @@
+    match = Regexp.compile(
+      'httperf --timeout=\d*
+               --client=\d*\/\d*
+               --server=localhost
+               --port=\d*
+               --uri=\/
+               --rate=\d*
+               --send-buffer=\d*
+               --recv-buffer=\d*
+               --num-conns=\d*
+               --num-calls=\d*\
+               Maximum connect burst length: (\d*)
+               Total: connections (\d*) requests (\d*) replies (\d*) test-duration (\d*\.\d*) s\\n\\n
+               Connection rate: (\d*\.\d*) conn\/s \((\d*\.\d*) ms\/conn, <=(\d*) concurrent connections\)\\n
+               Connection time \[ms\]: min (\d*\.\d*) avg (\d*\.\d*) max (\d*\.\d*) median (\d*\.\d*) stddev (\d*\.\d*)\\n
+               Connection time \[ms\]: connect (\d*\.\d*)\\n
+               Connection length \[replies\/conn\]: (\d*\.\d*)\\n\\n
+               Request rate: (\d*\.\d*) req\/s \((\d*\.\d*) ms\/req\)\\n
+               Request size \[B\]: (\d*\.\d*)\\n\\n
+               Reply rate \[replies\/s\]: min (\d*\.\d*) avg (\d*\.\d*) max (\d*\.\d*) stddev (\d*\.\d*) \((\d*) samples\)\\n
+               Reply time \[ms\]: response (\d*\.\d*) transfer (\d*\.\d*)\\n
+               Reply size \[B\]: header (\d*\.\d*) content (\d*\.\d*) footer (\d*\.\d*) \(total (\d*\.\d*)\)\\n
+               Reply status: 1xx=(\d*) 2xx=(\d*) 3xx=(\d*) 4xx=(\d*) 5xx=(\d*)\\n\\n
+               CPU time \[s\]: user (\d*.\d*) system (\d*.\d*) \(user (\d*.\d*)% system (\d*.\d*)% total (\d*.\d*)%\)\\n
+               Net I\/O: (\d*.\d*) 
+               KB\/s \((\d*.\d*\*\d*\^\d*) bps\)\\n\\n
+               Errors: total (\d*) client-timo (\d*) socket-timo (\d*) connrefused (\d*) connreset (\d*)\\n
+               Errors: fd-unavail (\d*) addrunavail (\d*) ftab-full (\d*) other (\d*)\\n').match(result)
+
+"httperf --timeout=5 --client=0/1 --server=192.168.1.210 --port=80 --uri=/ --rate=100 --send-buffer=4096 --recv-buffer=16384 --num-conns=500 --num-calls=2"
+[:timeout=>integer, :uri=>string, :rate=>integer, :num_conns=>integer, :num_calls=>integer]
+:timeout        => "timeout=(\d*)",
+:uri            => "uri=(\S*)"
+:rate           => "rate=(\d*)"
+:num_conns      => "num-conns=(\d*)"
+:num_calls      => "num-calls=(\d*)"
+
+"Maximum connect burst length: 1"
+[:burst_length=>integer]
+:burst_length   => "--burst-length=(\d*)"
+
+"Total: connections 500 requests 839 replies 678 test-duration 9.368 s"
+[:actual_conns=>integer, :total_requests=>integer, :total_replies=>integer, :test_duration=>float]
+:actual_conns       => "Total: connections (\d*)",
+:total_requests     => "Total: connections .*requests (\d*)",
+:total_replies      => "Total: connections .*replies (\d*)",
+:test_duration      => "Total: connections .*test-duration (\d*\.\d*)"
+
+
+"Connection rate: 53.4 conn/s (18.7 ms/conn, <=163 concurrent connections)"
+[:connections_per_sec=>float, :ms_per_connection=>float, :concurrent_connections=>string]
+:connections_per_sec        => "Connection rate: (\d*\.\d*)",
+:ms_per_connection          => "conns\/s \((\d*.d*)",
+:concurrent_connections     => "conn, (<=\d*) concurrent"
+
+"Connection time [ms]: min 2.9 avg 4.7 max 13.3 median 4.5 stddev 1.4"
+[:connection_time_min=>float, :connection_time_avg=>float, :connection_time_max=>float, :connections_time_stddev=>float]
+:connection_time_min      => "Connection time \[ms\]: min (\d*\.\d*)",
+:connection_time_avg      => "Connection time \[ms\]: .* avg (\d*\.\d*)",
+:connection_time_max      => "Connection time \[ms\]: .* max (\d*\.\d*)",
+:connections_time_stddev  => "Connection time \[ms\]: .* stddev (\d*\.\d*)"
+
+"Connection time [ms]: connect 1.1"
+[:connection_time_latency=>float]
+:connection_time_latency    => "Connection time \[ms\]: connect (\d*\.\d*)"
+
+"Connection length [replies/conn]: 2.000"
+[:connection_replies_per_connection=>float]
+:connection_replies_per_connection    => "Connection length \[replies\/conn\]: (\d*\.\d*)"
+
+"Request rate: 89.6 req/s (11.2 ms/req)"
+[:request_per_sec=>float, :request_duration=>float]
+:request_per_sec    => "Request rate: (\d*\.\d*)",
+:request_duration   => "Request rate: .* req\/s \((\d*\.\d*)"
+
+"Request size [B]: 66.0"
+[:request_size=>float]
+:request_size   => "Request size \[B\]: (\d*\.\d\*)"
+
+"Reply rate [replies/s]: min 135.6 avg 135.6 max 135.6 stddev 0.0 (1 samples)"
+[:replies_per_sec_min=>float, :replies_per_sec_avg=>float, :replies_per_sec_max=>float, :replies_per_sec_stddev=>float]
+:replies_per_sec_min            => "\[replies\/s\]: min (\d*\.\d*)",
+:replies_per_sec_avg            => "\[replies\/s\]: min.* avg (\d*\.\d*)",
+:replies_per_sec_max            => "\[replies\/s\]: min.* max (\d*\.\d*)",
+:replies_per_sec_stddev         => "\[replies\/s\]: min.* stddev (\d*\.\d*)"
+
+"Reply time [ms]: response 8.3 transfer 0.0"
+[:reply_time=>float]
+:reply_time   => "Reply time .* (\d*\.\d*)"
+
+"Reply size [B]: header 150.0 content 166.0 footer 0.0 (total 316.0)"
+"Reply status: 1xx=0 2xx=0 3xx=0 4xx=0 5xx=678"
+[:reply_status_1xx=>integer, :reply_status_2xx=>integer, :reply_status_3xx=>integer, :reply_status_4xx=>integer, :reply_status_5xx=>integer]
+:reply_status_1xx     => "Reply status.* 1xx=(\d*)",
+:reply_status_2xx     => "Reply status.* 2xx=(\d*)",
+:reply_status_3xx     => "Reply status.* 3xx=(\d*)",
+:reply_status_4xx     => "Reply status.* 4xx=(\d*)",
+:reply_status_5xx     => "Reply status.* 5xx=(\d*)"
+
+"CPU time [s]: user 3.00 system 6.30 (user 32.0% system 67.2% total 99.2%)"
+"Net I/O: 28.1 KB/s (0.2*10^6 bps)"
+
+"Errors: total 161 client-timo 161 socket-timo 0 connrefused 0 connreset 0"
+[:errors_total=>integer, :errors_client_timeout=>integer, :errors_socket_timeout=>integer, :errors_connection_refused=>integer, :errors_connection_reset=>integer]
+:errors_total                 => "Errors: total (\d*)",
+:errors_client_timeout        => "Errors: .*client-timo (\d*)",
+:errors_socket_timeout        => "Errors: .*socket-timo (\d*)",
+:errors_connection_refused    => "Errors: .*connrefused (\d*)",
+:errors_connection_reset      => "Errors: .*connreset (\d*)"
+
+"Errors: fd-unavail 0 addrunavail 0 ftab-full 0 other 0"
+[:errors_fd_inavailable=>integer, :errors_address_unavailable=> integer, :errors_ftab_full=>integer, :errors_other=>integer]
+:errors_fd_inavailable        => "Errors: fd-unavail (\d*)",
+:errors_address_unavailable   => "Errors: .* addrunavail (\d*)",
+:errors_ftab_full             => "Errors: .* ftab-full (\d*)",
+:errors_other                 => "Errors: .* other (\d*)"
+
+[
+  "httperf --timeout=5 --client=0/1 --server=localhost --port=3000 --uri=/ --rate=5 --send-buffer=4096 --recv-buffer=16384 --num-conns=30 --num-calls=10",
+  "Maximum connect burst length: 1",
+  "Total: connections 30 requests 0 replies 0 test-duration 5.800 s",
+  "Connection rate: 5.2 conn/s (193.3 ms/conn, <=1 concurrent connections)",
+  "Connection time [ms]: min 0.0 avg 0.0 max 0.0 median 0.0 stddev 0.0",
+  "Connection time [ms]: connect 0.0",
+  "Connection length [replies/conn]: 0.000",
+  "Request rate: 0.0 req/s (0.0 ms/req)",
+  "Request size [B]: 0.0",
+  "Reply rate [replies/s]: min 0.0 avg 0.0 max 0.0 stddev 0.0 (1 samples)",
+  "Reply time [ms]: response 0.0 transfer 0.0",
+  "Reply size [B]: header 0.0 content 0.0 footer 0.0 (total 0.0)",
+  "Reply status: 1xx=0 2xx=0 3xx=0 4xx=0 5xx=0",
+  "CPU time [s]: user 4.09 system 1.70 (user 70.5% system 29.2% total 99.7%)",
+  "Net I/O: 0.0 KB/s (0.0*10^6 bps)",
+  "Errors: total 30 client-timo 0 socket-timo 0 connrefused 30 connreset 0",
+  "Errors: fd-unavail 0 addrunavail 0 ftab-full 0 other 0"
+]

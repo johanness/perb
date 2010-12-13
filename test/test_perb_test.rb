@@ -11,7 +11,6 @@ class TestPerbTest < Test::Unit::TestCase
   end
 
   def test_existence_of_methods
-    assert_respond_to  PerbTest.new, :measure
     assert klass.new
     assert_respond_to klass.new, :run
     assert_respond_to klass.new, :command
