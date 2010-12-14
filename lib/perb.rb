@@ -1,6 +1,7 @@
-require File.expand_path('../perb/perb.rb', __FILE__)
-require File.expand_path('../perb/perb_test.rb', __FILE__)
-require File.expand_path('../perb/perb_parser.rb', __FILE__)
+require 'perb/perb.rb'
+require 'perb/perb_test.rb'
+require 'perb/perb_parser.rb'
+require 'perb/perb_base.rb'
 
 module Perb
 end

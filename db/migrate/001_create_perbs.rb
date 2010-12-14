@@ -46,7 +46,7 @@ class CreatePerbs < ActiveRecord::Migration
       t.column :replies_per_sec_stddev, :decimal, :precision=>5
 
       #"Reply time [ms]: response 8.3 transfer 0.0"
-      t.column :reply_times, :decimal, :precision=>5
+      t.column :reply_time, :decimal, :precision=>5
 
       #"Reply size [B]: header 150.0 content 166.0 footer 0.0 (total 316.0)"
       # none of these returns were implemented

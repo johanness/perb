@@ -16,6 +16,14 @@ class TestPerbTest < Test::Unit::TestCase
     assert_respond_to klass.new, :command
   end
 
+  def test_run_returns_an_array_of_hashes
+    ary = klass.new.run
+    assert_kind_of Array, ary
+    ary.each do |a|
+      assert_kind_of Hash, a
+    end
+  end
+
   protected
     def klass
       PerbTest

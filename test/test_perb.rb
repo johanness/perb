@@ -9,8 +9,4 @@ class TestPerb < Test::Unit::TestCase
   def test_existence_of_module
     assert defined? Perb
   end
-
-  #def test_existence_of_methods
-  #  assert respond_to?(:measure)
-  #end
 end
