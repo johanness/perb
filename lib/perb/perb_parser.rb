@@ -5,6 +5,11 @@ require "ruby-debug"
 
 module Perb
   class PerbParser
+    #TODO: 1. Needles/haystack theme is confusing.
+    #      2. input/output references should be renamed.
+    #      3. each_pair... calls should use something more
+    #         descriptive than 'k'/'v' in associated blocks
+
     attr_reader :result
 
     def initialize(result)
@@ -15,23 +20,8 @@ module Perb
       @result=result
     end
 
-    def parse
-      all_attributes={}
-
-      haystacks_and_needles.each_pair do |k, v|
-        output_line = get_matching_output_line(k)
-        find_needles(v, output_line)
-      end
-
-      all_attributes
-    end
-
-    def get_matching_output_line(current_haystack_line)
-      ret_val = ""
-      result.each do |r|
-        ret_val = r if (r =~ /.*#{current_haystack_line}.*/) == 0
-      end
-       ret_val
+    def find_needle(needle, haystack)
+      haystack.sub(/.*#{needle}.*/, '\1')
     end
 
     def find_needles(needles, haystack)
@@ -48,8 +38,23 @@ module Perb
       attributes_and_values
     end
 
-    def find_needle(needle, haystack)
-      haystack.sub(/.*#{needle}.*/, '\1')
+    def get_matching_output_line(current_haystack_line)
+      ret_val = ""
+      result.each do |r|
+        ret_val = r if (r =~ /.*#{current_haystack_line}.*/) == 0
+      end
+       ret_val
+    end
+
+    def parse
+      all_attributes={}
+
+      haystacks_and_needles.each_pair do |k, v|
+        output_line = get_matching_output_line(k)
+        all_attributes.merge!(find_needles(v, output_line))
+      end
+
+      all_attributes
     end
 
     def haystacks_and_needles
@@ -60,7 +65,7 @@ module Perb
               :num_conns                            => /num-conns=(\d*)/,
               :num_calls                            => /num-calls=(\d*)/ },
         /Maximum.*/=>{
-              :burst_length                         => /--burst-length=(\d*)/ },
+              :burst_length                         => /burst\ length: (\d*)/ },
         /Total:.*/=>{
               :actual_conns                         => /Total: connections (\d*)/,
               :total_requests                       => /Total: connections .*requests (\d*)/,
@@ -68,7 +73,7 @@ module Perb
               :test_duration                        => /Total: connections .*test-duration (\d*\.\d*)/ },
         /Connection rate:.*/=>{
               :connections_per_sec                  => /Connection rate: (\d*\.\d*)/,
-              :ms_per_connection                    => /conns\/s \((\d*.d*)/,
+              :ms_per_connection                    => /conn\/s \((\d*\.\d*)/,
               :concurrent_connections               => /conn, (<=\d*) concurrent/ },
         /Connection time \[ms\]: min.*/=>{
               :connection_time_min                  => /Connection time \[ms\]: min (\d*\.\d*)/,
@@ -83,7 +88,7 @@ module Perb
               :request_per_sec                      => /Request rate: (\d*\.\d*)/,
               :request_duration                     => /Request rate: .* req\/s \((\d*\.\d*)/ },
         /Request size.*/=>{
-              :request_size                         => /Request size \[B\]: (\d*\.\d\*)/ },
+              :request_size                         => /Request size \[B\]: (\d*\.\d*)/ },
         /Reply rate.*/=>{
               :replies_per_sec_min                  => /\[replies\/s\]: min (\d*\.\d*)/,
               :replies_per_sec_avg                  => /\[replies\/s\]: min.* avg (\d*\.\d*)/,
