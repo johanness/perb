@@ -5,12 +5,13 @@ require 'ruby-debug'
 require 'rake/gempackagetask'
 
 namespace :db do
-  db_yml=File.expand_path('../config/database.yml', __FILE__)
+  db_yml=File.expand_path('~/.perb/database.yml')
   config=YAML::load(File.open(db_yml))
   ActiveRecord::Base.establish_connection(config)
 
   desc "Migrate the database through scripts in db/migrate. Target specific version with VERSION=x"
   task :migrate => :environment do
+    debugger
     ActiveRecord::Migrator.migrate('db/migrate', ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
   end
 
@@ -25,7 +26,12 @@ namespace :db do
   end
 
   task :environment do
-    ActiveRecord::Base.logger = Logger.new(File.open('log/database.log', 'a'))
+    begin
+      ActiveRecord::Base.logger = Logger.new(File.open(File.expand_path('~/.perb/database.log'), 'r+'))
+    rescue Errno::ENOENT
+      `mkdir -p #{File.expand_path('~')+'/.perb/'} && touch #{File.expand_path('~')+'/.perb/database.log'}`
+      retry
+    end
   end
 end
 
