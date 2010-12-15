@@ -5,8 +5,12 @@ require 'perb/perb'
 
 module Perb
   class Runner
-    def run
-      results = Perb::PerbTest.new().run
+    def initialize(argv)
+      run(argv[0])
+    end
+
+    def run(test_yml)
+      results = Perb::PerbTest.new(test_yml).run
       Perb::PerbBase.create!(results)
     end
   end

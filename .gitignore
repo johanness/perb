@@ -6,3 +6,4 @@ trash/
 db/*.sqlite3
 *.log
 log/*
+pkg/*
