@@ -27,7 +27,7 @@ module Perb
       command = "httperf"
 
       test_settings.each_pair do  |key, val|
-        command += " --#{key}=#{val}"
+        command += " --#{key} #{val}"
       end
 
       command
