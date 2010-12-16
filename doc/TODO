@@ -1,0 +1,5 @@
+add support for multiple databases
+add a web front-end
+support for multiple test.yml files
+add database column for test name
+perf arguments (for instance ascending on a specific variable)
