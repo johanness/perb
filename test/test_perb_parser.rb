@@ -37,15 +37,15 @@ class TestPerbParse < Test::Unit::TestCase
   def test_find_needle_finds_needle_in_haystack
     haystack = "Total: connections 500 requests 839 replies 678 test-duration 9.368 s"
     needle = /Total: connections (\d*)/
-    assert_equal "500", @parser.find_needle(needle, haystack)
+    assert_equal 500, @parser.find_needle(needle, haystack)
   end
 
   def test_find_needle_finds_needle_in_haystack_again
     haystack = "Total: connections 500 requests 839 replies 678 test-duration 9.368 s"
     needle1 = /Total: connections (\d*)/
     needle2 = /Total: connections .*requests (\d*)/
-    assert_equal "500", @parser.find_needle(needle1, haystack)
-    assert_equal "839", @parser.find_needle(needle2, haystack)
+    assert_equal 500, @parser.find_needle(needle1, haystack)
+    assert_equal 839, @parser.find_needle(needle2, haystack)
   end
 
   def test_find_needles_returns_a_hash
@@ -59,10 +59,10 @@ class TestPerbParse < Test::Unit::TestCase
                :total_requests     => /Total: connections .*requests (\d*)/,
                :total_replies      => /Total: connections .*replies (\d*)/,
                :test_duration      => /Total: connections .*test-duration (\d*\.\d*)/}
-    assert_equal "500", @parser.find_needles(needles, haystack)[:actual_conns]
-    assert_equal "839", @parser.find_needles(needles, haystack)[:total_requests]
-    assert_equal "678", @parser.find_needles(needles, haystack)[:total_replies]
-    assert_equal "9.368", @parser.find_needles(needles, haystack)[:test_duration]
+    assert_equal 500, @parser.find_needles(needles, haystack)[:actual_conns]
+    assert_equal 839, @parser.find_needles(needles, haystack)[:total_requests]
+    assert_equal 678, @parser.find_needles(needles, haystack)[:total_replies]
+    assert_equal 9.368, @parser.find_needles(needles, haystack)[:test_duration]
   end
 
   def test_get_matching_output_line_returns_a_string
@@ -83,6 +83,16 @@ class TestPerbParse < Test::Unit::TestCase
     assert_kind_of Hash, @parser.parse
   end
 
+  #def test_parse_returns_a_hash_of_appropriate_types
+  #  parser=klass.new(input1)
+  #  parser_hash=parser.parse
+  #  column_names= Perb::PerbBase.column_names
+
+  #  column_names.each do |cn|
+  #    assert_equal parser_hash[cn].class, Perb::PerbBase.columns_hash[cn].type
+  #  end
+  #end
+
   def test_haystacks_and_needles_matches_expected_input1
     @parser.haystacks_and_needles.each_key do |k|
       results = 0
@@ -93,6 +103,16 @@ class TestPerbParse < Test::Unit::TestCase
       end
       assert_equal 1, results
     end
+  end
+
+  def test_cast_returns_a_converted_type
+    assert_kind_of Float, @parser.cast("1.3")
+    assert_kind_of Float, @parser.cast("32131.13413243")
+    assert_kind_of Float, @parser.cast("657671.34213")
+    assert_kind_of Integer, @parser.cast("1")
+    assert_kind_of Integer, @parser.cast("1018730418324")
+    assert_kind_of String, @parser.cast("6.7671.34213")
+    assert_kind_of String, @parser.cast("6l7671.34213")
   end
 
   def test_entire_stack_all_attributes_are_parsed_out_of_input1

@@ -4,6 +4,8 @@ require "active_record"
 require "ruby-debug"
 
 module Perb
+  FLOAT=/\A\d*\.\d*\z/
+  INTEGER=/\A\d*\z/
   class PerbParser
     #TODO: 1. Needles/haystack theme is confusing.
     #      2. input/output references should be renamed.
@@ -21,7 +23,8 @@ module Perb
     end
 
     def find_needle(needle, haystack)
-      haystack.sub(/.*#{needle}.*/, '\1')
+      value = cast(haystack.sub(/.*#{needle}.*/, '\1'))
+        value
     end
 
     def find_needles(needles, haystack)
@@ -32,7 +35,6 @@ module Perb
       attributes_and_values={}
 
       needles.each_pair do|k, v|
-        debugger
         attributes_and_values[k]=find_needle(v, haystack)
       end
 
@@ -45,6 +47,17 @@ module Perb
         ret_val = r if (r =~ /.*#{current_haystack_line}.*/) == 0
       end
        ret_val
+    end
+
+    def cast(string)
+      if(string=~FLOAT)
+        result=string.to_f
+      elsif(string=~INTEGER)
+        result=string.to_i
+      else
+        result=string
+      end
+      result
     end
 
     def parse

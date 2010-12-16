@@ -13,40 +13,40 @@ class CreatePerbs < ActiveRecord::Migration
       t.column :actual_conns, :integer
       t.column :total_requests, :integer
       t.column :total_replies, :integer
-      t.column :test_duration, :decimal, :precision=>5
+      t.column :test_duration, :decimal
 
       #"Connection rate: 53.4 conn/s (18.7 ms/conn, <=163 concurrent connections)"
-      t.column :connections_per_sec, :decimal, :precision=>5
-      t.column :ms_per_connection, :decimal, :precision=>5
+      t.column :connections_per_sec, :decimal
+      t.column :ms_per_connection, :decimal
       t.column :concurrent_connections, :string
       
       #"Connection time [ms]: min 2.9 avg 4.7 max 13.3 median 4.5 stddev 1.4"
-      t.column :connection_time_min, :decimal, :precision=>5
-      t.column :connection_time_avg, :decimal, :precision=>5
-      t.column :connection_time_max, :decimal, :precision=>5
-      t.column :connections_time_stddev, :decimal, :precision=>5
+      t.column :connection_time_min, :decimal
+      t.column :connection_time_avg, :decimal
+      t.column :connection_time_max, :decimal
+      t.column :connections_time_stddev, :decimal
 
       #"Connection time [ms]: connect 1.1"
-      t.column :connection_time_latency, :decimal, :precision=>5
+      t.column :connection_time_latency, :decimal
 
       #"Connection length [replies/conn]: 2.000"
-      t.column :connection_replies_per_connection, :decimal, :precision=>5
+      t.column :connection_replies_per_connection, :decimal
 
       #"Request rate: 89.6 req/s (11.2 ms/req)"
-      t.column :request_per_sec, :decimal, :precision=>5
-      t.column :request_duration, :decimal, :precision=>5
+      t.column :request_per_sec, :decimal
+      t.column :request_duration, :decimal
 
       #"Request size [B]: 66.0"
-      t.column :request_size, :decimal, :precision=>5
+      t.column :request_size, :decimal
 
       #"Reply rate [replies/s]: min 135.6 avg 135.6 max 135.6 stddev 0.0 (1 samples)"
-      t.column :replies_per_sec_min, :decimal, :precision=>5
-      t.column :replies_per_sec_avg, :decimal, :precision=>5
-      t.column :replies_per_sec_max, :decimal, :precision=>5
-      t.column :replies_per_sec_stddev, :decimal, :precision=>5
+      t.column :replies_per_sec_min, :decimal
+      t.column :replies_per_sec_avg, :decimal
+      t.column :replies_per_sec_max, :decimal
+      t.column :replies_per_sec_stddev, :decimal
 
       #"Reply time [ms]: response 8.3 transfer 0.0"
-      t.column :reply_time, :decimal, :precision=>5
+      t.column :reply_time, :decimal
 
       #"Reply size [B]: header 150.0 content 166.0 footer 0.0 (total 316.0)"
       # none of these returns were implemented
