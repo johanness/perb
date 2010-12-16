@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+base_path = ( File.expand_path(File.dirname(__FILE__)+'/..') )
+$LOAD_PATH << base_path unless $LOAD_PATH.include?(base_path)
+
 require 'lib/runner'
 
 r = Perb::Runner.new(ARGV)

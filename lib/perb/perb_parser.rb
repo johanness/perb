@@ -32,6 +32,7 @@ module Perb
       attributes_and_values={}
 
       needles.each_pair do|k, v|
+        debugger
         attributes_and_values[k]=find_needle(v, haystack)
       end
 
@@ -47,7 +48,7 @@ module Perb
     end
 
     def parse
-      all_attributes={}
+      all_attributes={:created_at => Time.now.to_s}
 
       haystacks_and_needles.each_pair do |k, v|
         output_line = get_matching_output_line(k)
