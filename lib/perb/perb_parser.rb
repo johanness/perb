@@ -4,8 +4,8 @@ require "active_record"
 require "ruby-debug"
 
 module Perb
-  FLOAT=/\A\d*\.\d*\z/
-  INTEGER=/\A\d*\z/
+  PERB_FLOAT=/\A\d*\.\d*\z/
+  PERB_INTEGER=/\A\d*\z/
   class PerbParser
     #TODO: 1. Needles/haystack theme is confusing.
     #      2. input/output references should be renamed.
@@ -50,9 +50,9 @@ module Perb
     end
 
     def cast(string)
-      if(string=~FLOAT)
+      if(string=~PERB_FLOAT)
         result=string.to_f
-      elsif(string=~INTEGER)
+      elsif(string=~PERB_INTEGER)
         result=string.to_i
       else
         result=string

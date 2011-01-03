@@ -1,4 +1,5 @@
 require File.expand_path('../helper.rb', __FILE__)
+    #assert klass.new
 
 class TestPerbTest < Test::Unit::TestCase
   include Perb
@@ -11,13 +12,12 @@ class TestPerbTest < Test::Unit::TestCase
   end
 
   def test_existence_of_methods
-    assert klass.new
-    assert_respond_to klass.new, :run
-    assert_respond_to klass.new, :command
+    assert_respond_to klass.new(nil), :run
+    assert_respond_to klass.new(nil), :command
   end
 
   def test_run_returns_an_array_of_hashes
-    ary = klass.new.run
+    ary = klass.new(nil).run
     assert_kind_of Array, ary
     ary.each do |a|
       assert_kind_of Hash, a

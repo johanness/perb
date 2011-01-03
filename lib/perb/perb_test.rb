@@ -5,7 +5,10 @@ module Perb
   class PerbTest
     attr_reader :settings
 
-    def initialize(settings_yml=File.expand_path('~/.perb/settings.yml'))
+    def initialize(settings_yml)
+      if(settings_yml==nil)
+        settings_yml=File.expand_path('~/.perb/settings.yml')
+      end
       self.settings=(settings_yml)
     end
 

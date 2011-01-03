@@ -5,6 +5,9 @@ require 'rubygems'
 require 'ruby-debug'
 
 require File.expand_path('../../lib/perb', __FILE__)
+# This should be included from ../../lib/perb. Why doesn't
+# it work?
+require File.expand_path('../../lib/runner', __FILE__)
 
 class Test::Unit::TestCase
   def setup

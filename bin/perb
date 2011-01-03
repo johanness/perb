@@ -5,5 +5,4 @@ $LOAD_PATH << base_path unless $LOAD_PATH.include?(base_path)
 
 require 'lib/runner'
 
-r = Perb::Runner.new(ARGV)
-r.run
+Perb::Runner.run(ARGV)
