@@ -1,7 +1,4 @@
-require 'lib/perb/perb_parser'
-require 'lib/perb/perb_test'
-require 'lib/perb/perb_base'
-require 'lib/runner'
+require 'lib/perb'
 require 'optparse'
 
 module Perb
@@ -30,6 +27,7 @@ module Perb
         end
       end
       p_options.parse!
+
       options
     end
 

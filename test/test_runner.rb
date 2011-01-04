@@ -1,4 +1,5 @@
 require File.expand_path('../helper.rb', __FILE__)
+require File.expand_path('../../lib/runner.rb', __FILE__)
 
 class TestRunner < Test::Unit::TestCase
   include Perb
@@ -8,7 +9,7 @@ class TestRunner < Test::Unit::TestCase
 
   def test_existence_of_modules_and_classes
     assert defined? Perb
-    assert defined? Perb::Runner
+    assert defined? Runner
   end
 
   def test_existence_of_methods
@@ -16,7 +17,13 @@ class TestRunner < Test::Unit::TestCase
   end
 
   def test_class_method_run
-    #assert_kind_of String, klass.run(nil)
+    assert_kind_of String, Perb::PerbBase.connection.instance_variable_get(:@config)[:database]
+    assert_equal "/home/chris/.perb/perb.sqlite3", Perb::PerbBase.connection.instance_variable_get(:@config)[:database]
+
+    ary = Perb::PerbTest.new(nil).run
+    records = Perb::PerbBase.all.size
+    klass.run(nil)
+    assert_equal records+1, Perb::PerbBase.all.size
   end
 
   protected

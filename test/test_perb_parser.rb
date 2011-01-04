@@ -1,6 +1,6 @@
 require File.expand_path('../helper.rb', __FILE__)
 
-class TestPerbParse < Test::Unit::TestCase
+class TestPerbParser < Test::Unit::TestCase
   include Perb
 
   def test_existence_of_perb_test

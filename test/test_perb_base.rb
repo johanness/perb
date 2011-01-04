@@ -11,6 +11,10 @@ class TestPerbBase < Test::Unit::TestCase
     assert_respond_to klass, :new
   end
 
+  def test_path_to_db_file
+    assert_equal "/home/chris/.perb/perb.sqlite3", klass.connection.instance_variable_get(:@config)[:database]
+  end
+
   def test_initializer_takes_string
     assert_nothing_raised(){ klass.new()}
   end

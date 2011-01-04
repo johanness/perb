@@ -1,10 +1,6 @@
 require 'yaml'
 require 'rubygems'
-require "active_record"
-require "ruby-debug"
-
-class Result < ActiveRecord::Base
-end
+require 'active_record'
 
 module Perb
   require File.expand_path('../../../lib/perb/perb_test', __FILE__)
