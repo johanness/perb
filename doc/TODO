@@ -1,7 +1,6 @@
 add support for multiple databases
 add a web front-end
 support for multiple test.yml files (i.e. a test directory)
-add database column for test name
 add column for original output of command
 perf arguments (for instance ascending on a specific variable)
 add test results after test completes, not after entire test suite

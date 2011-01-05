@@ -18,17 +18,18 @@ module Perb
 
     def run
       results=[]
-      settings.values.each do |test_settings|
+      settings.each_pair do |test_name, test_settings|
         result = `#{command(test_settings)}`
         result_by_line = result.split("\n").delete_if{|e| e.empty?}
-        results << PerbParser.new(result_by_line).parse
+        parsed_result = PerbParser.new(result_by_line).parse
+        parsed_result[:title]=test_name
+        results << parsed_result
       end
       results
     end
 
     def command(test_settings)
       command = "httperf"
-
       test_settings.each_pair do  |key, val|
         command += " --#{key} #{val}"
       end

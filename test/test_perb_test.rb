@@ -24,6 +24,11 @@ class TestPerbTest < Test::Unit::TestCase
     end
   end
 
+  def test_each_test_includes_the_title_from_the_test_yml
+    ary = klass.new(config).run
+    assert_equal "my perb test", ary.first[:title]
+  end
+
   protected
     def klass
       PerbTest
