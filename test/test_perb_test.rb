@@ -12,12 +12,12 @@ class TestPerbTest < Test::Unit::TestCase
   end
 
   def test_existence_of_methods
-    assert_respond_to klass.new(nil), :run
-    assert_respond_to klass.new(nil), :command
+    assert_respond_to klass.new(config), :run
+    assert_respond_to klass.new(config), :command
   end
 
   def test_run_returns_an_array_of_hashes
-    ary = klass.new(nil).run
+    ary = klass.new(config).run
     assert_kind_of Array, ary
     ary.each do |a|
       assert_kind_of Hash, a
@@ -27,5 +27,9 @@ class TestPerbTest < Test::Unit::TestCase
   protected
     def klass
       PerbTest
+    end
+    
+    def config
+      File.expand_path('../fixtures/tests/test1.yml', __FILE__)
     end
 end

@@ -20,14 +20,18 @@ class TestRunner < Test::Unit::TestCase
     assert_kind_of String, Perb::PerbBase.connection.instance_variable_get(:@config)[:database]
     assert_equal "/home/chris/.perb/perb.sqlite3", Perb::PerbBase.connection.instance_variable_get(:@config)[:database]
 
-    ary = Perb::PerbTest.new(nil).run
+    ary = Perb::PerbTest.new(config).run
     records = Perb::PerbBase.all.size
-    klass.run(nil)
+    klass.run(config)
     assert_equal records+1, Perb::PerbBase.all.size
   end
 
   protected
     def klass
       Perb::Runner
+    end
+
+    def config
+      File.expand_path('../fixtures/tests/test1.yml', __FILE__)
     end
 end
