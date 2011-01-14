@@ -17,7 +17,10 @@ module Perb
     def parse_options
       options={}
       p_options = OptionParser.new do |opts|
-        opts.on("-h", "--help", "Show this message.") do
+        opts.banner = "Usage: perb [options]"
+        opts.separator ""
+
+        opts.on_tail("-h", "--help", "Show this message.") do
            puts opts
            exit
         end
@@ -29,6 +32,10 @@ module Perb
       p_options.parse!
 
       options
+
+    rescue OptionParser::InvalidOption
+      puts p_options
+      exit 0
     end
 
     def run
