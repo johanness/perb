@@ -1,4 +1,4 @@
-support for multiple test.yml files (i.e. a test directory)
+perb_test should either take a yaml object or a key-value pair, not a file string
 add support for multiple databases
 add a web front-end
 add column for original output of command
