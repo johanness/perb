@@ -33,9 +33,9 @@ module Perb
 
       options
 
-      rescue OptionParser::InvalidOption 
-      puts p_options 
-      exit 0 
+    rescue OptionParser::InvalidOption
+      puts p_options
+      exit 0
     end
 
     def run
